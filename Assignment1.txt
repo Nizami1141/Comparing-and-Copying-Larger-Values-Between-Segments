@@ -1,0 +1,42 @@
+SET 0
+src1:
+DB 0x4 DB 0x6 DB 0x3 DB 0x78 DB 0x47
+DB 0x49 DB 0x1 DB 0x89 DB 0x23 DB 0x12
+DB 0x0
+SET 1
+src2:
+DB 0x5A DB 0x3F DB 0x72 DB 0x18 DB 0xB4
+DB 0x9C DB 0x2D DB 0x67 DB 0xE3 DB 0x4F
+DB 0x01
+SET 2
+dest: DB [0,10]
+
+start:
+    MOV AX, 0
+    MOV DS, AX
+    MOV AX, 1
+    MOV ES, AX
+    MOV AX, 2
+    MOV SS, AX
+    MOV SI, 0
+    MOV CX, 11
+
+_loop:
+    MOV AL, DS:[SI]
+    MOV BL, ES:[SI]
+    CMP AL, BL
+    JG store_src1
+    MOV DL, BL
+    MOV SS:[SI], DL
+    JMP next
+
+store_src1:
+    MOV DL, AL
+    MOV SS:[SI], DL
+
+next:
+    INC SI
+    LOOP _loop
+
+end:
+    HLT
